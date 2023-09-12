@@ -14,34 +14,35 @@
 </head>
 
     <body>
-        <nav class="nav navbar-light bg-light">
+        <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">Best Cars</a>
-                    <!-- Insert links to pages below -->
                     <a class="navbar-brand" href="{% url 'djangoapp:about' %}">About Us</a>
-                    <a class="navbar-brand" href="">Contact Us</a>
+                    <a class="navbar-brand" href="{% url 'djangoapp:contact' %}">Contact Us</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a class="btn btn-link" href="#">Username</a>
-                        <a class="btn btn-link" href="INSERT CODE HERE">Logout</a>
+                        <a class="btn btn-link" href="#">Logout</a>
                     </li>
                     <li>
-                        <form class="form-inline" action="INSERT ACTION HERE" method="POST">
+                        <form class="form-inline" action="$" method="POST">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Username" name="username">
                                 <input type="password" class="form-control" placeholder="Password" name="pwd">
                                 <button class="btn btn-primary" type="submit">Login</button>
-                                <a class="btn btn-link" href="INPUT CODE HERE">Sign up</a>
+                                <a class="btn btn-link" href="#">Sign up</a>
                             </div>
                         </form>
                     </li>
                 </ul>
             </div>
         </nav>
+        
     <!--Add a dealer table here -->
 
+        <footer class="footer"><a class="navbar-brand" href="{% url 'djangoapp:contact' %}">Contact Us</a></footer>
     </body>
 
 </html>
