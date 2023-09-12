@@ -12,22 +12,24 @@
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 
 </head>
-
     <body>
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Best Cars</a>
+                    <a class="navbar-brand" href="#">Dealership Review</a>
                     <a class="navbar-brand" href="{% url 'djangoapp:about' %}">About Us</a>
                     <a class="navbar-brand" href="{% url 'djangoapp:contact' %}">Contact Us</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
                     <li>
-                        <a class="btn btn-link" href="#">Username</a>
-                        <a class="btn btn-link" href="#">Logout</a>
+                        <a class="btn btn-link" href="#">{{ user.firstname}}({{ user.username }})</a>
+                        <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
                     </li>
+                    {% else %}
                     <li>
-                        <form class="form-inline" action="$" method="POST">
+                        <form class="form-inline" action="{% url 'djangoapp:login' %}" method="POST">
+                            {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Username" name="username">
                                 <input type="password" class="form-control" placeholder="Password" name="pwd">
@@ -36,13 +38,14 @@
                             </div>
                         </form>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
         
     <!--Add a dealer table here -->
 
-        <footer class="footer"><a class="navbar-brand" href="{% url 'djangoapp:contact' %}">Contact Us</a></footer>
+        <!-- <footer class="footer"><a class="navbar-brand" href="{% url 'djangoapp:contact' %}">Contact Us</a></footer> -->
     </body>
 
 </html>
