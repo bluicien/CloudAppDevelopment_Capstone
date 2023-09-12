@@ -31,10 +31,10 @@
                         <form class="form-inline" action="{% url 'djangoapp:login' %}" method="POST">
                             {% csrf_token %}
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Username" name="username">
-                                <input type="password" class="form-control" placeholder="Password" name="pwd">
+                                <input type="text" class="form-control" placeholder="Enter User Name" name="username">
+                                <input type="password" class="form-control" placeholder="Enter Password" name="pwd">
                                 <button class="btn btn-primary" type="submit">Login</button>
-                                <a class="btn btn-link" href="#">Sign up</a>
+                                <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign up</a>
                             </div>
                         </form>
                     </li>
