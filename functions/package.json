@@ -1,7 +1,6 @@
 {
   "name": "functions",
   "version": "1.0.0",
-  "description": "",
   "main": "get-dealership.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,5 +11,6 @@
   "dependencies": {
     "@cloudant/cloudant": "^4.5.1",
     "express": "^4.18.2"
-  }
+  },
+  "description": ""
 }
