@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import CarDealer
-from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -95,6 +95,23 @@ def get_dealer_details(request, dealer_id):
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
-    
-    return
+    if request.user.is_authenticated:
+        user = request.user
+        review = dict()
+        review["time"] = datetime.utcnow().isoformat()
+        review["name"] = f"{user.first_name} {user.last_name}"
+        review["dealership"] = dealer_id
+        review["review"] = "This is a great car dealer"
+        # review["purchase"] 
+        # review["purchase_date"]
+        # review["car_make"]
+        # review["car_model"]
+        # review["car_year"]
+        url = "https://bluicien-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
+        json_payload = dict()
+        json_payload["review"]=review
+        review_posted = post_request(url, json_payload, dealerId=dealer_id)
+        print(review_posted)
+    else: 
+        print("User is not authenticated")
 
