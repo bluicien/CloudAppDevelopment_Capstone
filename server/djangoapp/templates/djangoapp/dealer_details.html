@@ -40,7 +40,7 @@
     <!-- Add reviews as cards -->
         <div class="container-fluid">
             <span class="btn-group" style="margin-bottom: 20px">
-                <h3 style="margin-right: 10px"><b>Reviews for Dealership</b></h3>
+                <h3 style="margin-right: 10px">Reviews for <b>Sub-Ex Car Dealership</b></h3>
                 {% if user.is_authenticated %}
                 <a class="btn btn-secondary" style="border-radius: 5px" href="% url 'django:add_review' %">Add Review</a>
                 {% endif %}
@@ -56,9 +56,9 @@
                     <img class="card-img-left" style="width: 35px" src="{{MEDIA_URL}}/emoji/negative.png">
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title"><b>{{review.name}}, {{review.car_make}}</b></h5>
-                        <h5><b>{{review.purchase_date|date:'Y'}}</b></h5>
-                        <p class="card-text"><b>{{review.review}}</b></p>
+                        <h5 class="card-title">{{review.name}}, {{review.car_make}}</h5>
+                        <h5>{{review.purchase_date|date:'Y'}}</h5>
+                        <p class="card-text">{{review.review}}</p>
                     </div>
                 </div>
                 {% endfor %}
