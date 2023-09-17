@@ -5,6 +5,7 @@ from requests.auth import HTTPBasicAuth
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
+import datetime
 
 
 # Create a `get_request` to make HTTP GET requests
@@ -77,22 +78,23 @@ def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
         for review in reviews:
             review_doc = review
             review_obj = DealerReview(dealership=review_doc["dealership"], name=review_doc["name"], purchase=review_doc["purchase"], 
-                                    review=review_doc["review"], purchase_data=review_doc["purchase_date"], 
+                                    review=review_doc["review"], purchase_date=review_doc["purchase_date"], 
                                     car_make=review_doc["car_make"], car_model=review_doc["car_model"], car_year=review_doc["car_year"], 
                                     sentiment="Null", id=review_doc["id"])
             review_obj.sentiment = analyze_review_sentiments(review_obj.review)
+            if review_obj.purchase_date:
+                review_obj.purchase_date = datetime.datetime.strptime(review_obj.purchase_date, '%m/%d/%Y')            
             results.append(review_obj)
-
     return results
 
 
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
-def get_dealer_by_id_from_cf(url, **kwargs):
+def get_dealer_by_id_from_cf(url, dealer_id, **kwargs):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url, dealerId=dealerId)
+    json_result = get_request(url, dealerId=dealer_id)
     if json_result:
         # Get the row list in JSON as dealers
         dealers = json_result
@@ -132,8 +134,7 @@ def analyze_review_sentiments(dealerreview):
     features=Features(
         keywords=KeywordsOptions(emotion=False, sentiment=True))).get_result()
 
-
-    print(json.dumps(response, indent=2))
-
+    results = response
+    return (results["keywords"][0]["sentiment"]["label"])
     # - Call get_request() with specified arguments
     # - Get the returned sentiment label such as Positive or Negative

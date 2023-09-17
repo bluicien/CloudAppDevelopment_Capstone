@@ -80,18 +80,21 @@ def get_dealerships(request):
         url = "https://bluicien-3000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
+        context["dealership_list"] = dealerships
         # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        # dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
-        return HttpResponse(dealer_names)
+        return render(request, 'djangoapp/index.html', context)
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
+    context = {}
     if request.method == "GET":
         url = f"https://bluicien-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/get_reviews?id={dealer_id}"
-        reviews = get_dealer_reviews_from_cf(url, dealer_id)
-        return HttpResponse(reviews)
+        reviews_list = get_dealer_reviews_from_cf(url, dealer_id)
+        context["reviews_list"] = reviews_list
+        return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
@@ -102,11 +105,11 @@ def add_review(request, dealer_id):
         review["name"] = f"{user.first_name} {user.last_name}"
         review["dealership"] = dealer_id
         review["review"] = "This is a great car dealer"
-        # review["purchase"] 
-        # review["purchase_date"]
-        # review["car_make"]
-        # review["car_model"]
-        # review["car_year"]
+        review["purchase"] = False
+        review["purchase_date"] = None
+        review["car_make"] = None
+        review["car_model"] = None
+        review["car_year"] = None
         url = "https://bluicien-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
         json_payload = dict()
         json_payload["review"]=review
