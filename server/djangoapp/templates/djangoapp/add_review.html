@@ -8,9 +8,37 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
-
+    <script type="text/javascript">
+        $('.date-own').datepicker({
+           format: 'mm/dd/yyyy'
+         });
+    </script>
 </head>
     <body>
-    <!--Add review form here -->
+        <form action="{% url 'djangoapp:add_review' dealer_id %}" method="POST">
+            <div class=container>
+                <h1>Add review about Sub-Ex Car Dealership</h1>
+                <div class="form-group">
+                    <label for="content"><b>Enter the review content:</b></label>
+                    <textarea class="form-control" id="content" name="content" rows="2" placeholder="Please write your review..." required></textarea>
+                    <br>
+                    <input class="form-check-input" type="checkbox" name="purhchasecheck" id="purchasecheck">
+                    <label for="purchasecheck">Has purchased the car from Sub-Ex Car Dealership?(select purhcased car information below if checked")</label>
+                    <br>
+                    <label><b>Select your car (model-make-year):</b></label>
+                    <select name="car" id="car" class="form-select" required>
+                        {% for car in cars %}
+                            <option selected value={{car.id}}>{{car.model_name}}-{{car.make.make_name}}-{{car.year|date:"Y"}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <br>
+                    <label><b>Select Your Purchase Date:</b></label>
+                    <input class="date-own form-control" type="date" name="purchasedate" id="purchasedate">
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
     </body>
 </html>

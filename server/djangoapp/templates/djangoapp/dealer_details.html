@@ -42,7 +42,7 @@
             <span class="btn-group" style="margin-bottom: 20px">
                 <h3 style="margin-right: 10px">Reviews for <b>Sub-Ex Car Dealership</b></h3>
                 {% if user.is_authenticated %}
-                <a class="btn btn-secondary" style="border-radius: 5px" href="% url 'django:add_review' %">Add Review</a>
+                <a class="btn btn-secondary" style="border-radius: 5px" href="{% url 'djangoapp:add_review' dealer_id %}">Add Review</a>
                 {% endif %}
             </span>
             <div class="card-columns">
