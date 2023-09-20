@@ -111,20 +111,27 @@ def add_review(request, dealer_id):
         if request.method == "POST":
             user = request.user
             review = dict()
+            review["id"] = dealer_id
             review["time"] = datetime.utcnow().isoformat()
             review["name"] = f"{user.first_name} {user.last_name}"
             review["dealership"] = dealer_id
             review["review"] = request.POST['content']
-            review["purchase"] = request.POST['purhcasecheck']
+            checked = request.POST.get('purchasecheck', False)
+            if checked == "on":
+                checked = True
+            review["purchase"] = checked
             review["purchase_date"] = request.POST['purchasedate']
-            review["car_make"] = car.make
-            review["car_model"] = car.model_name
-            review["car_year"] = car.year
-            url = "https://bluicien-5000.theiadocker-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
-            json_payload["review"]=review
+            car_make, car_model, car_year = request.POST['car_details'].split("-")
+            review["car_make"] = car_make
+            review["car_model"] = car_model
+            review["car_year"] = car_year
+            url = "https://bluicien-5000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
+            json_payload = {}
+            json_payload["review"] = review
+            post_request(url, json_payload, dealerId=dealer_id)
             print("Review submitted.")
             return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
-
+            
     else: 
         print("User is not authenticated")
 

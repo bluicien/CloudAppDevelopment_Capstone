@@ -16,20 +16,37 @@
 </head>
     <body>
         <form action="{% url 'djangoapp:add_review' dealer_id %}" method="POST">
-            <div class=container>
+            {% csrf_token %}
+            <div class=container-fluid>
                 <h1>Add review about Sub-Ex Car Dealership</h1>
                 <div class="form-group">
                     <label for="content"><b>Enter the review content:</b></label>
-                    <textarea class="form-control" id="content" name="content" rows="2" placeholder="Please write your review..." required></textarea>
+                    <textarea   class="form-control" 
+                                id="content" 
+                                name="content" 
+                                rows="2" 
+                                placeholder="Please write your review..." 
+                                required>
+                    </textarea>
                     <br>
-                    <input class="form-check-input" type="checkbox" name="purhchasecheck" id="purchasecheck">
-                    <label for="purchasecheck">Has purchased the car from Sub-Ex Car Dealership?(select purhcased car information below if checked")</label>
+                    <input  class="form-check-input" 
+                            type="checkbox" 
+                            name="purchasecheck" 
+                            id="purchasecheckbox"
+                            style="display: block; margin-left: 2px"
+                    >                         
+                    <label  for="purchasecheckbox"
+                            style="margin-left: 20px; font-weight: 500">
+                            Has purchased the car from Sub-Ex Car Dealership?
+                            <span class="text-muted">(select purhcased car information below if checked)<span>
+                    </label>
                     <br>
                     <label><b>Select your car (model-make-year):</b></label>
-                    <select name="car" id="car" class="form-select" required>
+                    <select name="car_details" id="car" class="form-select" required>
                         {% for car in cars %}
-                            <option selected value={{car.id}}>{{car.model_name}}-{{car.make.make_name}}-{{car.year|date:"Y"}}</option>
+                            <option selected value={{car.model_name}}-{{car.make.make_name}}-{{car.year}}>{{car.model_name}}-{{car.make.make_name}}-{{car.year|date:"Y"}}</option>
                         {% endfor %}
+                        </script>
                     </select>
                     <br>
                     <br>
