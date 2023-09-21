@@ -18,7 +18,7 @@
         <form action="{% url 'djangoapp:add_review' dealer_id %}" method="POST">
             {% csrf_token %}
             <div class=container-fluid>
-                <h1>Add review about Sub-Ex Car Dealership</h1>
+                <h1>Add review about {{dealer.full_name}}</h1>
                 <div class="form-group">
                     <label for="content"><b>Enter the review content:</b></label>
                     <textarea   class="form-control" 
@@ -37,7 +37,7 @@
                     >                         
                     <label  for="purchasecheckbox"
                             style="margin-left: 20px; font-weight: 500">
-                            Has purchased the car from Sub-Ex Car Dealership?
+                            Has purchased the car from {{dealer.full_name}}?
                             <span class="text-muted">(select purhcased car information below if checked)<span>
                     </label>
                     <br>
@@ -50,8 +50,8 @@
                     </select>
                     <br>
                     <br>
-                    <label><b>Select Your Purchase Date:</b></label>
-                    <input class="date-own form-control" type="date" name="purchasedate" id="purchasedate">
+                    <label><b>Select Your Purchase Date (MM/DD/YYYY):</b></label>
+                    <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
                     <br>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

@@ -94,8 +94,12 @@ def get_dealer_details(request, dealer_id):
     if request.method == "GET":
         url = f"https://bluicien-5000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/get_reviews?id={dealer_id}"
         reviews_list = get_dealer_reviews_from_cf(url, dealer_id)
+        dealer = get_dealer_by_id_from_cf(
+            url="https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get", 
+            dealer_id=dealer_id)
         context["reviews_list"] = reviews_list
         context["dealer_id"] = dealer_id
+        context["dealer"] = dealer
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
@@ -104,7 +108,11 @@ def add_review(request, dealer_id):
         if request.method == "GET":
             context = {}
             cars = list(CarModel.objects.filter(dealer_id=dealer_id))
+            dealer = get_dealer_by_id_from_cf(
+            url="https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get", 
+            dealer_id=dealer_id)            
             context["cars"] = cars
+            context["dealer"] = dealer
             context["dealer_id"] = dealer_id
             return render(request, "djangoapp/add_review.html", context)
 
