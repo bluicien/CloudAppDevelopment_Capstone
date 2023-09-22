@@ -42,8 +42,8 @@ def get_request(url, **kwargs):
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 def post_request(url, json_payload, **kwargs):
-    print(json_payload)
     requests.post(url, params=kwargs, json=json_payload['review'])
+    print("POST_PAYLOAD", json_payload)
     return print("Review posted")
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
@@ -74,7 +74,7 @@ def get_dealers_from_cf(url, **kwargs):
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
 def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
     results = []
-    json_result = get_request(url, dealerId=dealer_id)
+    json_result = get_request(url, id=dealer_id)
     if json_result:
         reviews = json_result
         for review in reviews:
@@ -112,31 +112,33 @@ def get_dealer_by_id_from_cf(url, dealer_id, **kwargs):
 def analyze_review_sentiments(dealerreview):
     url = "https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/e9647bb4-2918-4acd-9d51-84c7ce9ef927"
     api_key = "WkMOfDRpUnFF9msEm2NZKeamAvGIc73AixHz0dKifuMv"
-    # parameters = {
-    #                     "entities": {
-    #                         "emotion": False,
-    #                         "sentiment": True,
-    #                         "limit": 2
-    #                     }
-    #                 }
-                
-    # response = get_request(url, api_key=api_key, text=dealerreview,
-    #                         version="2022-04-07", features="sentiment", return_analyzed_text=True)
+    parameters = {
+                        "entities": {
+                            "emotion": False,
+                            "sentiment": True,
+                            "limit": 2
+                        }
+                    }  
+    response = get_request(url, api_key=api_key, text=dealerreview,
+                            version="2022-04-07", features="sentiment", return_analyzed_text=True)
+    results = response
+    print(results)
+    # return (results["keywords"][0]["sentiment"]["label"])
+
+    # authenticator = IAMAuthenticator(api_key)
+    # natural_language_understanding = NaturalLanguageUnderstandingV1(
+    # version='2022-04-07',
+    # authenticator=authenticator)
+
+    # natural_language_understanding.set_service_url(url)
+
+    # response = natural_language_understanding.analyze(
+    # text=dealerreview,
+    # features=Features(
+    #     keywords=KeywordsOptions(emotion=False, sentiment=True))).get_result()
+
     # results = response
     # return (results["keywords"][0]["sentiment"]["label"])
-    authenticator = IAMAuthenticator(api_key)
-    natural_language_understanding = NaturalLanguageUnderstandingV1(
-    version='2022-04-07',
-    authenticator=authenticator)
 
-    natural_language_understanding.set_service_url(url)
-
-    response = natural_language_understanding.analyze(
-    text=dealerreview,
-    features=Features(
-        keywords=KeywordsOptions(emotion=False, sentiment=True))).get_result()
-
-    results = response
-    return (results["keywords"][0]["sentiment"]["label"])
     # - Call get_request() with specified arguments
     # - Get the returned sentiment label such as Positive or Negative

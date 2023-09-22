@@ -90,15 +90,16 @@ def get_dealerships(request):
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
-    context = {}
     if request.method == "GET":
-        url = f"https://bluicien-5000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/get_reviews?id={dealer_id}"
-        reviews_list = get_dealer_reviews_from_cf(url, dealer_id)
-        dealer = get_dealer_by_id_from_cf(
-            url="https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get", 
-            dealer_id=dealer_id)
-        context["reviews_list"] = reviews_list
+        context = {}
         context["dealer_id"] = dealer_id
+
+        review_url = "https://bluicien-5000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/get_reviews"
+        reviews = get_dealer_reviews_from_cf(review_url, dealer_id)
+        context["reviews_list"] = reviews
+
+        dealer_url = "https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
+        dealer = get_dealer_by_id_from_cf(dealer_url, dealer_id=dealer_id)
         context["dealer"] = dealer
         return render(request, 'djangoapp/dealer_details.html', context)
 
@@ -108,17 +109,18 @@ def add_review(request, dealer_id):
         if request.method == "GET":
             context = {}
             cars = list(CarModel.objects.filter(dealer_id=dealer_id))
-            dealer = get_dealer_by_id_from_cf(
-            url="https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get", 
-            dealer_id=dealer_id)            
             context["cars"] = cars
+
+            dealer_url = "https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
+            dealer = get_dealer_by_id_from_cf(dealer_url, dealer_id=dealer_id)  
+
             context["dealer"] = dealer
             context["dealer_id"] = dealer_id
             return render(request, "djangoapp/add_review.html", context)
 
         if request.method == "POST":
             user = request.user
-            review = dict()
+            review = {}
             review["id"] = dealer_id
             review["time"] = datetime.utcnow().isoformat()
             review["name"] = f"{user.first_name} {user.last_name}"
