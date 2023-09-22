@@ -43,8 +43,7 @@ def get_request(url, **kwargs):
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 def post_request(url, json_payload, **kwargs):
     requests.post(url, params=kwargs, json=json_payload['review'])
-    print("POST_PAYLOAD", json_payload)
-    return print("Review posted")
+    return print("Review posted", json_payload)
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
@@ -96,7 +95,8 @@ def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
 def get_dealer_by_id_from_cf(url, dealer_id, **kwargs):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url, dealerId=dealer_id)
+    json_result = get_request(url, id=dealer_id)
+    print("LINE 99", json_result)
     if json_result:
         # Get the row list in JSON as dealers
         dealers = json_result
@@ -122,7 +122,7 @@ def analyze_review_sentiments(dealerreview):
     response = get_request(url, api_key=api_key, text=dealerreview,
                             version="2022-04-07", features="sentiment", return_analyzed_text=True)
     results = response
-    print(results)
+    # print(results)
     # return (results["keywords"][0]["sentiment"]["label"])
 
     # authenticator = IAMAuthenticator(api_key)
