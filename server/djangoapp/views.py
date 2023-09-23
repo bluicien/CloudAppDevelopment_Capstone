@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from .models import CarDealer, CarModel
-from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request, get_dealer_by_id_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request, get_dealer_by_id_from_cf, get_dealers_by_state
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -13,7 +13,6 @@ import json
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
 
 # Create your views here.
 # Create an `about` view to render a static about page
@@ -39,9 +38,9 @@ def login_request(request):
             login(request, user)
             return redirect('djangoapp:index')
         else:
-            return render(request, 'djangoapp/index.html', context)
+            return redirect('djangoapp:index')
     else:
-        return render(request, 'djangoapp/index.html', context)
+        return redirect('djangoapp:index')
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
@@ -82,9 +81,7 @@ def get_dealerships(request):
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
         context["dealership_list"] = dealerships
-        # Concat all dealer's short name
-        # dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
+
         return render(request, 'djangoapp/index.html', context)
 
 
@@ -101,6 +98,7 @@ def get_dealer_details(request, dealer_id):
         dealer_url = "https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
         dealer = get_dealer_by_id_from_cf(dealer_url, dealer_id=dealer_id)
         context["dealer"] = dealer
+
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
@@ -118,6 +116,7 @@ def add_review(request, dealer_id):
 
             context["dealer"] = dealer
             context["dealer_id"] = dealer_id
+
             return render(request, "djangoapp/add_review.html", context)
 
         if request.method == "POST":
@@ -129,6 +128,7 @@ def add_review(request, dealer_id):
             review["dealership"] = dealer_id
             review["review"] = request.POST['content']
             checked = request.POST.get('purchasecheck', False)
+
             if checked == "on":
                 checked = True
             review["purchase"] = checked
@@ -142,8 +142,9 @@ def add_review(request, dealer_id):
             json_payload["review"] = review
             post_request(url, json_payload, dealerId=dealer_id)
             print("Review submitted.")
+
             return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
             
     else: 
         print("User is not authenticated")
-
+        return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
