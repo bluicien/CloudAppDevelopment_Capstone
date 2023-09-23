@@ -109,6 +109,8 @@ def add_review(request, dealer_id):
         if request.method == "GET":
             context = {}
             cars = list(CarModel.objects.filter(dealer_id=dealer_id))
+            for car in cars:
+                car.year = car.year.strftime("%Y")
             context["cars"] = cars
 
             dealer_url = "https://bluicien-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
