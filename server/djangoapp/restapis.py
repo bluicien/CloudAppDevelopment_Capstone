@@ -67,7 +67,7 @@ def get_dealers_from_cf(url, **kwargs):
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
 def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
     results = []
-    json_result = get_request(url, id=dealer_id)
+    json_result = get_request(url, dealerId=dealer_id)
     if json_result:
         reviews = json_result
         for review in reviews:
@@ -85,15 +85,13 @@ def get_dealer_reviews_from_cf(url, dealer_id, **kwargs):
 
 # Create a get_dealer_by_id_from_cf method to get dealers from a cloud function by id
 def get_dealer_by_id_from_cf(url, dealer_id, **kwargs):
-    results = []
     # Call get_request with a URL parameter
     json_result = get_request(url, id=dealer_id)
-    dealer = json_result
+    dealer = json_result[0]
 
     return dealer
 
 def get_dealers_by_state(url, state, **kwargs):
-    results = []
     # Call get_request with a URL parameter
     json_result = get_request(url, state=state)
     dealers = json_result
