@@ -25,7 +25,7 @@ class CarMake(models.Model):
 # - Any other fields you would like to include in car model
 # - __str__ method to print a car make object
 class CarModel(models.Model):
-    SEDAN = 'sedal'
+    SEDAN = 'sedan'
     SUV = 'SUV'
     WAGON = 'wagon'
     TYPES = [
